@@ -1,5 +1,12 @@
 <?php
 /**
+ * dG52 PHP SourceMod (SM) Plugin Updater
+ *
+ * @author Douglas Stridsberg
+ * @url http://code.google.com/p/dg52-php-sm-plugin-updater/
+ * @email doggie52@gmail.com
+ */
+/**
  * clsRcon
  * Connects with a Source dedicated server and allows you to execute rcon commands
  *
@@ -206,7 +213,15 @@ class clsRcon {
         return array_values($aPackets);
     }
 }
-function get_data($url, $range)
+/**
+ * get_html_data
+ * Return the source code of a website, either using cURL or get_file_contents
+ *
+ * @access public
+ * @param string $url The URL of the page to be accessed.
+ * @param string $range The range, in bytes, of the page to download. Example: 50-75.
+ */
+function get_html_data($url, $range)
 {
 	// If cURL exists, make use of range
 	if(function_exists('curl_init'))
