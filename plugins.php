@@ -22,21 +22,26 @@
 	include "class.php";
 
 ?>
-<style type="text/css">
-	#data {
-		font-family: Verdana;
-		}
-	#data small {
-		color: grey;
-		}
-</style>
-<div id="data">
-	<table>
-		<tr>
-			<td><b>Title</b></td>
-			<td><b>Status</b></td>
-			<td><b>Cached</b></td>
-		</tr>
+<head>
+	<title>dG52 PHP SourceMod (SM) Plugin Updater</title>
+	<style type="text/css">
+		#data {
+			font-family: Verdana;
+			}
+		#data small {
+			color: grey;
+			}
+	</style>
+</head>
+<body>
+	<div id="data">
+		<h1>dG52 PHP SourceMod (SM) Plugin Updater</h1>
+		<table>
+			<tr>
+				<td><b>Title</b></td>
+				<td><b>Status</b></td>
+				<td><b>Cached</b></td>
+			</tr>
 <?php
 
 	// Start execution time counter
@@ -201,12 +206,16 @@
 				<td>$status</td>
 				<td>$cached</td>
 			</tr>";
+			
+			// Flush the output
+			ob_flush();
+			flush();
 		}
 	}
 
 ?>
 
-</table>
+		</table>
 
 <?php
 
@@ -219,5 +228,7 @@
 	echo "<small>Script completed in ".$totaltime." seconds.</small>";
 
 ?>
-
-</div>
+		<br />
+		<small>Made by Doggie52 (doggie52@gmail.com). <a href="http://code.google.com/p/dg52-php-sm-plugin-updater/issues/entry">Report any issues you encounter!</a></small>
+	</div>
+</body>
