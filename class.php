@@ -213,15 +213,15 @@ class clsRcon {
         return array_values($aPackets);
     }
 }
+
 /**
  * get_html_data
  * Return the source code of a website, either using cURL or get_file_contents
  *
- * @access public
  * @param string $url The URL of the page to be accessed.
- * @param string $range The range, in bytes, of the page to download. Example: 50-75.
+ * @param string $range The range, in bytes, of the page to download. Example: 50-75. (default: NULL)
  */
-function get_html_data($url, $range)
+function get_html_data($url, $range = NULL)
 {
 	// If cURL exists, make use of range
 	if(function_exists('curl_init'))
@@ -231,7 +231,10 @@ function get_html_data($url, $range)
 		curl_setopt($ch,CURLOPT_URL,$url);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 		curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
-		curl_setopt($ch,CURLOPT_RANGE,$range);
+		if($range)
+		{
+			curl_setopt($ch,CURLOPT_RANGE,$range);
+		}
 		$data = curl_exec($ch);
 		curl_close($ch);
 	}

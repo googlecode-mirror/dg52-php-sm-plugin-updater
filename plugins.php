@@ -117,7 +117,7 @@
 			if(empty($Iplugins['names'])||!in_array($Iplugintitles[$id], $Iplugins['names']))
 			{
 				$url = "http://www.sourcemod.net/plugins.php?title=".$urltitle."&search=1";
-				$pluginpage = get_html_data($url, '8030-50000');
+				$pluginpage = get_html_data($url);
 				$pluginpage = str_replace("\n", "", $pluginpage);
 				// Match the plugin search page against patterns for URL and author
 				$searchpattern = "/(?:title=\"Approved\")(?:.*?)(?:\")(.*?)(?:\")(?:.*?)(?:<a href=\")(?:.*?)(?:\">)(.*?)(<\/a>)/i";
@@ -160,7 +160,7 @@
 			// Was a forum URL found? If so, determine plugin version
 			if(isset($forumurl))
 			{
-				$forumpage = get_html_data($forumurl, '19003-21400');
+				$forumpage = get_html_data($forumurl);
 				$forumpage = str_replace("\n", "", $forumpage);
 				// Match the plugin's forum page against a pattern for version
 				$forumpattern = "/(?:Plugin Version)(?:.*?)(?:bold;\">)(.*?)(?:<\/div>)/i";
@@ -169,36 +169,28 @@
 				$Npluginversion = $forumarray[1][0];
 				$Ipluginversion = $Ipluginversions[$id];
 				
-				/**
-				 * Note:
-				 * The method to compare version numbers coded below is not a good one.
-				 * It breaks 'a' and 'b' releases and does not work when longer version numbers
-				 * are converted into smaller ones, to name a few examples.
-				 * To help spot mistakes made by the script I therefore include the unconverted
-				 * plugin versions in the $status variable.
-				 */
-				// Remove all non-numbers from the versions in order to compare them
-				$fNpluginversion = ereg_replace("[^0-9]", "", $Npluginversion);
-				$fIpluginversion = ereg_replace("[^0-9]", "", $Ipluginversion);
+				// Use version_compare() to compare versions
+				// This might or might not work with all version numbers
+				$versionstate = version_compare($Npluginversion, $Ipluginversion);
 				
-				if($fIpluginversion == $fNpluginversion)
+				if($versionstate == '0')
 				{
 					$status = "no update necessary ($Ipluginversion == $Npluginversion)";
 				}
-				elseif($fIpluginversion < $fNpluginversion)
+				elseif($versionstate == '1')
 				{
 					$status = "<a href=\"$forumurl\">update needed, click here</a> ($Ipluginversion < $Npluginversion)";
 				}
-				elseif($fIpluginversion > $fNpluginversion)
+				elseif($versionstate == '-1')
 				{
 					$status = "newest version is older than yours' - <a href=\"$forumurl\">an oversight might be necessary</a> ($Ipluginversion > $Npluginversion)";
 				}
 			}
 			else
 			{
-				$status = "no matching forum URL was found";
-				// Help users search for the plugin using Google
-				$forumurl = "http://www.google.com/search?q=$urltitle+plugin+sourcemod";
+				$status = "no matching forum URL was found (installed version: $Ipluginversion, author: $Ipluginauthors[$id])";
+				// Allow users to add their own URL
+				$forumurl = "addurl.php?name=$title";
 			}
 			echo "
 			<tr>
