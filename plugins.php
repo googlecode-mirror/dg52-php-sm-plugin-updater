@@ -131,7 +131,7 @@
 				$pluginpage = get_html_data($url);
 				$pluginpage = str_replace("\n", "", $pluginpage);
 				// Match the plugin search page against patterns for URL and author
-				$searchpattern = "/(?:title=\"Approved\")(?:.*?)(?:\")(.*?)(?:\")(?:.*?)(?:<a href=\")(?:.*?)(?:\">)(.*?)(<\/a>)/i";
+				$searchpattern = '/(?:title=\"(?:Approved|New)\")(?:.*?)(?:\")(.*?)(?:\")(?:.*?)(?:<a href=\")(?:.*?)(?:\">)(.*?)(<\/a>)/i';
 				preg_match_all($searchpattern, $pluginpage, $searcharray);
 				
 				// Start a counter to count what URL we are at
