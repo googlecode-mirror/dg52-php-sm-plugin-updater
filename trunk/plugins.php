@@ -27,6 +27,7 @@
 <body>
 	<div id="data">
 		<h1>dG52 PHP SourceMod (SM) Plugin Updater</h1>
+		<h3>"<?php echo "$preferredDatabase"; ?>" database back-end in use.</h3>
 		<table>
 			<tr>
 				<td><b>Title</b></td>
