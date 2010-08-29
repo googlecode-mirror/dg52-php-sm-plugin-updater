@@ -7,17 +7,8 @@
  * @email doggie52@gmail.com
  */
 
-	/**
-	 * Configurable variables.
-	 * Edit these to fit your environment.
-	 */
-	$serverAddress = '192.168.0.175';
-	$serverPort = '27015';
-	$serverRCONPassword = 'k?w+a7$PhuVU@r7*UC*-k&daswup!@Ux8D!j&Gu4w95WEw=a874a-uMUnuspEdrE';
-	/**
-	 * End of configurable variables.
-	 */
-
+	// Include the configuration
+	include "config.php";
 	// Include the RCON class and other functions
 	include "class.php";
 
@@ -54,16 +45,36 @@
 	set_time_limit("120");
 
 	// Initiate the database
-	$db = new SQLiteDatabase("db.sqlite");
+	if($preferredDatabase == "sqlite")
+	{
+		$db = new SQLiteDatabase("db.sqlite");
+	}
+	elseif($preferredDatabase == "mysql")
+	{
+		$socket = mysql_connect($mysqlHost, $mysqlUsername, $mysqlPassword) or die(mysql_error());
+		mysql_select_db($mysqlDatabase, $socket);
+	}
 
 	// Get a list of all plugins which already have a forum URL associated with them
 	$database = array();
-	$query = $db->query("SELECT * FROM plugins");
-	while($query->valid())
+	$sql = "SELECT * FROM plugins";
+	if($preferredDatabase == "sqlite")
 	{
-		$database[] = $query->current();
-		// Move pointer to next row
-		$query->next();
+		$query = $db->query($sql);
+		while($query->valid())
+		{
+			$database[] = $query->current();
+			// Move pointer to next row
+			$query->next();
+		}
+	}
+	elseif($preferredDatabase == "mysql")
+	{
+		$query = mysql_query($sql, $socket);
+		while($row = mysql_fetch_array($query))
+		{
+			$database[] = $row;
+		}
 	}
 
 	$Iplugins = array();
@@ -140,8 +151,15 @@
 						{
 							$forumurl = $searcharray[1][$i];
 							// Insert the URL into a new row in the database along with the name of the plugin
-							$db->query("INSERT INTO plugins (name, url)
-								VALUES ('$title', '$forumurl')");
+							$sql = "INSERT INTO plugins (name, url) VALUES ('$title', '$forumurl')";
+							if($preferredDatabase == "sqlite")
+							{
+								$db->query($sql);
+							}
+							elseif($preferredDatabase == "mysql")
+							{
+								mysql_query($sql, $socket);
+							}
 							$handled = TRUE;
 						}
 					}
@@ -154,8 +172,17 @@
 			else
 			{
 				// If the plugin already exists in our database, simply use the stored URL
-				$query = $db->query("SELECT url FROM plugins WHERE name = '$Iplugintitles[$id]'");
-				$forumurl = $query->current();
+				$sql = "SELECT url FROM plugins WHERE name = '$Iplugintitles[$id]'";
+				if($preferredDatabase == "sqlite")
+				{
+					$query = $db->query($sql);
+					$forumurl = $query->current();
+				}
+				elseif($preferredDatabase == "mysql")
+				{
+					$query = mysql_query($sql, $socket);
+					$forumurl = mysql_fetch_array($query);
+				}
 				$forumurl = $forumurl['url'];
 				$cached = "yes";
 			}
@@ -220,7 +247,7 @@
 	$mtime = $mtime[1] + $mtime[0];
 	$endtime = $mtime;
 	$totaltime = ($endtime - $starttime);
-	echo "<small>Script completed in ".substr($totaltime, 0, -7)." seconds.</small>";
+	echo "<small>Script completed in ".round($totaltime, 3)." seconds.</small>";
 
 ?>
 		<br />
