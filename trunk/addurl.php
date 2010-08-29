@@ -9,6 +9,9 @@
 
 	// Include the class
 	include "class.php";
+	
+	// Include the configuration
+	include "config.php";
 
 	// Initiate database
 	if($preferredDatabase == "sqlite")
@@ -39,7 +42,6 @@
 		$url = secure_sql_input($_GET['url']);
 		// Insert the URL into a new row in the database along with the name of the plugin
 		$sql = "INSERT INTO plugins (name, url) VALUES ('".$name."', '".$url."')";
-		$db->query();
 		if($preferredDatabase == "sqlite")
 		{
 			$db->query($sql);
