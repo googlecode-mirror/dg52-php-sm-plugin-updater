@@ -220,6 +220,7 @@ class clsRcon {
  *
  * @param string $url The URL of the page to be accessed.
  * @param string $range The range, in bytes, of the page to download. Example: 50-75. (default: NULL)
+ * @return string $data The HTML source of the page.
  */
 function get_html_data($url, $range = NULL)
 {
@@ -244,6 +245,23 @@ function get_html_data($url, $range = NULL)
 		$data = file_get_contents($url);
 	}
 	return $data;
+}
+
+/**
+ * secure_sql_input
+ * Secures the input from SQL commands
+ * Taken from http://www.dagondesign.com/articles/writing-secure-php-scripts-part-1/
+ *
+ * @param string $value The input needing securing.
+ * @return string The secured input.
+ */
+function secure_sql_input($value){
+	if(get_magic_quotes_gpc())
+	{
+		$value = stripslashes($value);
+	}
+	$value = mysql_real_escape_string($value);
+	return $value;
 }
 
 ?>

@@ -7,6 +7,9 @@
  * @email doggie52@gmail.com
  */
 
+	// Include the class
+	include "class.php";
+
 	// Initiate database
 	$db = new SQLiteDatabase("db.sqlite");
 	
@@ -23,9 +26,12 @@
 	}
 	else
 	{
+		// Secure the input
+		$name = secure_sql_input($_GET['name']);
+		$url = secure_sql_input($_GET['url']);
 		// Insert the URL into a new row in the database along with the name of the plugin
 		$db->query("INSERT INTO plugins (name, url)
-			VALUES ('".$_GET['name']."', '".$_GET['url']."')");
+			VALUES ('".$name."', '".$url."')");
 		echo "<p>Plugin URL added, please <a href=\"plugins.php\">re-run the updater</a>!";
 	}
 

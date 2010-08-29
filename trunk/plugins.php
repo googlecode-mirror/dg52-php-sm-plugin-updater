@@ -127,10 +127,13 @@
 				$i = "0";
 				// Unset the previous forum URL variable to ensure that we're grabbing a fresh page
 				unset($forumurl);
+				// Unset the handle-variable to ensure that it hasn't been set before.
+				$handled = "";
+				
 				foreach($searcharray[2] as $searchauthor)
 				{
 					// If an author is found we do not want to overwrite him (the second alternative is not likely to be better than the first)
-					if(!$handled)
+					if(!$handled == TRUE)
 					{
 						// Check if the plugin author's name is found within the forum author's name or vice versa
 						if(preg_match("/$searchauthor/i", $Ipluginauthors[$id])||preg_match("/$Ipluginauthors[$id]/i", $searchauthor))
@@ -217,7 +220,7 @@
 	$mtime = $mtime[1] + $mtime[0];
 	$endtime = $mtime;
 	$totaltime = ($endtime - $starttime);
-	echo "<small>Script completed in ".$totaltime." seconds.</small>";
+	echo "<small>Script completed in ".substr($totaltime, 0, -7)." seconds.</small>";
 
 ?>
 		<br />
