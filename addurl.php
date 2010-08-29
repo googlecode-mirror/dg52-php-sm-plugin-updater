@@ -11,7 +11,15 @@
 	include "class.php";
 
 	// Initiate database
-	$db = new SQLiteDatabase("db.sqlite");
+	if($preferredDatabase == "sqlite")
+	{
+		$db = new SQLiteDatabase("db.sqlite");
+	}
+	elseif($preferredDatabase == "mysql")
+	{
+		$socket = mysql_connect($mysqlHost, $mysqlUsername, $mysqlPassword) or die(mysql_error());
+		mysql_select_db($mysqlDatabase, $socket);
+	}
 	
 	// If the form has not been submitted
 	if(!isset($_GET['submit']))
@@ -30,8 +38,16 @@
 		$name = secure_sql_input($_GET['name']);
 		$url = secure_sql_input($_GET['url']);
 		// Insert the URL into a new row in the database along with the name of the plugin
-		$db->query("INSERT INTO plugins (name, url)
-			VALUES ('".$name."', '".$url."')");
+		$sql = "INSERT INTO plugins (name, url) VALUES ('".$name."', '".$url."')";
+		$db->query();
+		if($preferredDatabase == "sqlite")
+		{
+			$db->query($sql);
+		}
+		elseif($preferredDatabase == "mysql")
+		{
+			mysql_query($sql, $socket);
+		}
 		echo "<p>Plugin URL added, please <a href=\"plugins.php\">re-run the updater</a>!";
 	}
 
