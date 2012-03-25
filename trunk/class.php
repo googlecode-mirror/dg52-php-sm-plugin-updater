@@ -264,4 +264,36 @@ function secure_sql_input($value){
 	return $value;
 }
 
+/**
+ * filemtime_r
+ * Returns the timestamp of the latest modified file in a folder
+ * Taken from http://www.php.net/manual/en/function.filemtime.php#88649 but heavily modified
+ *
+ * @param string $path The path to check for the latest modified file
+ * @return string The timestamp of the latest modified file
+ */
+function filemtime_r($path)
+{
+	$disallowedFilenames = array(
+		'config.php',
+	);
+
+	if(!file_exists($path))
+	{
+		return 0;
+	}
+
+	$ret = 0;
+
+	foreach (glob($path."/*") as $fn)
+	{
+		echo "\n $fn \n";
+		if (filemtime_r($fn) > $ret && !in_array($disallowedFilenames, $fn))
+		{
+			$ret = filemtime_r($fn);
+		}
+	}
+	return $ret;   
+}
+
 ?>

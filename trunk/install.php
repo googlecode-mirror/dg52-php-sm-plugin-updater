@@ -1,5 +1,4 @@
 <?php
-
 /**
  * dG52 PHP SourceMod (SM) Plugin Updater
  *
