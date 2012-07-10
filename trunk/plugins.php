@@ -94,12 +94,12 @@
 	}
 
 	// Connect to the server and issue the appropriate command
-	$oTest = new clsRcon($serverAddress, $serverPort, $serverRCONPassword);
-	$oTest->connect();
-	$aResponse = $oTest->rcon('sm plugins list');
+	$server = new clsRcon($serverAddress, $serverPort, $serverRCONPassword);
+	$server->connect();
+	$response = $server->rcon('sm plugins list');
 
 	// Match the list of plugins against patterns for title, version and author
-	$plugins = $aResponse[0]['String1'];
+	$plugins = $response[0]['String1'];
 	$pluginpattern = "/(?:\")(.*?)(?:\")(?: \()(.*?)(?:\))(?: by )(.*?)(?:\\n)/i";
 	preg_match_all($pluginpattern, $plugins, $pluginarray);
 	
