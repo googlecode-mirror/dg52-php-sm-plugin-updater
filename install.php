@@ -21,7 +21,7 @@
 		{
 			// Create the table and the columns
 			$db->query("BEGIN;
-					CREATE TABLE `plugins` (name CHAR(255) PRIMARY KEY, url CHAR(255));
+					CREATE TABLE 'plugins' (name CHAR(255) PRIMARY KEY, url CHAR(255));
 					COMMIT;");
 			echo "Table `plugins` created.";
 		}
